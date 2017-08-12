@@ -1,7 +1,5 @@
-# from cloudant import Cloudant
 from flask import Flask, render_template, request, jsonify
-# import atexit
-# import cf_deployment_tracker
+
 import os
 import json
 import numpy as np
@@ -11,8 +9,6 @@ from sklearn.neighbors import NearestNeighbors
 from fuzzywuzzy import fuzz
 # import matplotlib.pyplot as plt
 
-# Emit Bluemix deployment event
-# cf_deployment_tracker.track()
 
 app = Flask(__name__)
 
@@ -24,29 +20,6 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 df = pd.read_csv('ObservationData.csv')
 model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
 wide_df = pd.DataFrame()
-# if 'VCAP_SERVICES' in os.environ:
-#     vcap = json.loads(os.getenv('VCAP_SERVICES'))
-#     print('Found VCAP_SERVICES')
-#     if 'cloudantNoSQLDB' in vcap:
-#         creds = vcap['cloudantNoSQLDB'][0]['credentials']
-#         user = creds['username']
-#         password = creds['password']
-#         url = 'https://' + creds['host']
-#         client = Cloudant(user, password, url=url, connect=True)
-#         db = client.create_database(db_name, throw_on_exists=False)
-# elif os.path.isfile('vcap-local.json'):
-#     with open('vcap-local.json') as f:
-#         vcap = json.load(f)
-#         print('Found local VCAP_SERVICES')
-#         creds = vcap['services']['cloudantNoSQLDB'][0]['credentials']
-#         user = creds['username']
-#         password = creds['password']
-#         url = 'https://' + creds['host']
-#         client = Cloudant(user, password, url=url, connect=True)
-#         db = client.create_database(db_name, throw_on_exists=False)
-
-# On Bluemix, get the port number from the environment variable PORT
-# When running this app on the local machine, default the port to 8080
 port = int(os.getenv('PORT', 8080))
 
 def prepare_model():
@@ -92,16 +65,6 @@ def prepare_model():
     model_knn.fit(wide_df_sparse)
 
 def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
-    """
-    Inputs:
-    query_artist: query crop name
-    artist_plays_matrix: artist play count dataframe (not the sparse one, the pandas dataframe)
-    knn_model: our previously fitted sklearn knn model
-    k: the number of nearest neighbors.
-    
-    Prints: Artist recommendations for the query artist
-    Returns: None
-    """
     print(df_matrix.head())
     query_index = None
     ratio_tuples = []
@@ -153,57 +116,14 @@ def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
     xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
     yAxis = {"title": {"text": 'yAxis Label'}}
     return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
-  # /* Endpoint to greet and add a new visitor to database.
-# * Send a POST request to localhost:8080/api/visitors with body
-# * {
-# *     "name": "Bob"
-# * }
-# */
-
+ 
 @app.route('/recomend', methods=['POST'])
 def getData():
     data = request.get_json()
     crop = data['crop']
     recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
     return jsonify({'status': recommendations})
-
-
-
-@app.route('/api/visitors', methods=['GET'])
-def get_visitor():
-    if client:
-        return jsonify(list(map(lambda doc: doc['name'], db)))
-    else:
-        print('No database')
-        return jsonify([])
-
-# /**
-#  * Endpoint to get a JSON array of all the visitors in the database
-#  * REST API example:
-#  * <code>
-#  * GET http://localhost:8080/api/visitors
-#  * </code>
-#  *
-#  * Response:
-#  * [ "Bob", "Jane" ]
-#  * @return An array of all the visitor names
-#  */
-@app.route('/api/visitors', methods=['POST'])
-def put_visitor():
-    user = request.json['name']
-    if client:
-        data = {'name':user}
-        db.create_document(data)
-        return 'Hello %s! I added you to the database.' % user
-    else:
-        print('No database')
-        return 'Hello %s!' % user
-
-# @atexit.register
-# def shutdown():
-#     if client:
-#         client.disconnect()
-
+    
 if __name__ == '__main__':
     prepare_model()
     app.run(host='0.0.0.0', port=port, debug=True)
