@@ -141,9 +141,9 @@ def rec():
 
     for i in range(0, len(distances.flatten())):
         if i == 0:
-            print 'Recommendations for {0}:\n'.format(wide_df.index[query_index])
+            print( 'Recommendations for {0}:\n'.format(wide_df.index[query_index]))
         else:
-            print '{0}: {1}, with distance of {2}:'.format(i, wide_df.index[indices.flatten()[i]], distances.flatten()[i])
+            print( '{0}: {1}, with distance of {2}:'.format(i, wide_df.index[indices.flatten()[i]], distances.flatten()[i]))
 
 
 if __name__ == '__main__':
