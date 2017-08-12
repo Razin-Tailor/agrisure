@@ -44,7 +44,7 @@
             <ul class="nav navbar-nav">
               <li class="visible-xs-block">
                 <div class="nav-avatar">
-                  <img class="img-circle" src="img/avatars/1.jpg" alt="" width="48" height="48">
+                  <img class="img-circle" src="{{url_for('static',filename='img/avatars/1.jpg')}}" alt="" width="48" height="48">
                 </div>
                 <h4 class="navbar-text text-center">Welcome, Jon Snow!</h4>
               </li>
@@ -97,7 +97,7 @@
                         <div class="a-item">
                           <a href="#">
                             <div class="ai-icon">
-                              <img class="img-responsive" src="img/brands/github.png" alt="">
+                              <img class="img-responsive" src="{{url_for('static', filename='img/brands/github.png')}}" alt="">
                             </div>
                             <div class="ai-title">Github</div>
                           </a>
@@ -107,7 +107,7 @@
                         <div class="a-item">
                           <a href="#">
                             <div class="ai-icon">
-                              <img class="img-responsive" src="img/brands/wordpress.png" alt="">
+                              <img class="img-responsive" src="{{url_for('static', filename='img/brands/wordpress.png')}}" alt="">
                             </div>
                             <div class="ai-title">Wordpress</div>
                           </a>
@@ -117,7 +117,7 @@
                         <div class="a-item">
                           <a href="#">
                             <div class="ai-icon">
-                              <img class="img-responsive" src="img/brands/gmail.png" alt="">
+                              <img class="img-responsive" src="{{url_for('static', filename='img/brands/gmail.png')}}" alt="">
                             </div>
                             <div class="ai-title">Gmail</div>
                           </a>
@@ -127,7 +127,7 @@
                         <div class="a-item">
                           <a href="#">
                             <div class="ai-icon">
-                              <img class="img-responsive" src="img/brands/drive.png" alt="">
+                              <img class="img-responsive" src="{{url_for('static', filename='img/brands/drive.png')}}" alt="">
                             </div>
                             <div class="ai-title">Drive</div>
                           </a>
@@ -137,7 +137,7 @@
                         <div class="a-item">
                           <a href="#">
                             <div class="ai-icon">
-                              <img class="img-responsive" src="img/brands/dribbble.png" alt="">
+                              <img class="img-responsive" src="{{url_for('static', filename='img/brands/dribbble.png')}}" alt="">
                             </div>
                             <div class="ai-title">Dribbble</div>
                           </a>
@@ -181,28 +181,28 @@
                       </div>
                       <div class="n-item">
                         <div class="ni-img">
-                          <img class="img-circle" src="img/avatars/3.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static',filename='img/avatars/3.jpg')}}" alt="" width="40" height="40">
                         </div>
                         <div class="ni-text"><a href="#">Linda Davis</a> commented post <a href="#">How to use Bower</a>.</div>
                         <div class="ni-time">3 hours</div>
                       </div>
                       <div class="n-item">
                         <div class="ni-img">
-                          <img class="img-circle" src="img/avatars/4.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static',filename='img/avatars/4.jpg')}}" alt="" width="40" height="40">
                         </div>
                         <div class="ni-text"><a href="#">John Doe</a> is now following <a href="#">Kate Morris</a>.</div>
                         <div class="ni-time">10 min</div>
                       </div>
                       <div class="n-item">
                         <div class="ni-img">
-                          <img class="img-circle" src="img/avatars/5.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static', filename='img/avatars/5.jpg')}}" alt="" width="40" height="40">
                         </div>
                         <div class="ni-text"><a href="#">Alexander Olsen</a> liked post <a href="#">Getting Started with SASS</a>.</div>
                         <div class="ni-time">40 min</div>
                       </div>
                       <div class="n-item">
                         <div class="ni-img">
-                          <img class="img-circle" src="img/avatars/6.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static',filename='img/avatars/6.jpg')}}" alt="" width="40" height="40">
                         </div>
                         <div class="ni-text"><a href="#">Linda Davis</a> commented post <a href="#">How to use Bower</a>.</div>
                         <div class="ni-time">3 hours</div>
@@ -570,7 +570,7 @@
                     <a href="#">
                       <div class="media-left">
                         <div class="avatar box-40">
-                          <img class="img-circle" src="img/avatars/2.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static',filename='img/avatars/2.jpg')}}" alt="" width="40" height="40">
                           <span class="status top right bg-success"></span>
                         </div>
                       </div>
@@ -587,7 +587,7 @@
                     <a href="#">
                       <div class="media-left">
                         <div class="avatar box-40">
-                          <img class="img-circle" src="img/avatars/3.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static', filename='img/avatars/3.jpg')}}" alt="" width="40" height="40">
                           <span class="status top right bg-warning"></span>
                         </div>
                       </div>
@@ -601,7 +601,7 @@
                     <a href="#">
                       <div class="media-left">
                         <div class="avatar box-40">
-                          <img class="img-circle" src="img/avatars/4.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{'static',filename='img/avatars/4.jpg'}}" alt="" width="40" height="40">
                           <span class="status top right bg-success"></span>
                         </div>
                       </div>
@@ -618,7 +618,7 @@
                     <a href="#">
                       <div class="media-left">
                         <div class="avatar box-40">
-                          <img class="img-circle" src="img/avatars/5.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static',filename='img/avatars/5.jpg')}}" alt="" width="40" height="40">
                           <span class="status top right bg-success"></span>
                         </div>
                       </div>
@@ -635,7 +635,7 @@
                     <a href="#">
                       <div class="media-left">
                         <div class="avatar box-40">
-                          <img class="img-circle" src="img/avatars/6.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static', filename='img/avatars/6.jpg')}}" alt="" width="40" height="40">
                           <span class="status top right bg-warning"></span>
                         </div>
                       </div>
@@ -649,7 +649,7 @@
                     <a href="#">
                       <div class="media-left">
                         <div class="avatar box-40">
-                          <img class="img-circle" src="img/avatars/7.jpg" alt="" width="40" height="40">
+                          <img class="img-circle" src="{{url_for('static',filename='img/avatars/7.jpg')}}" alt="" width="40" height="40">
                           <span class="status top right bg-success"></span>
                         </div>
                       </div>
