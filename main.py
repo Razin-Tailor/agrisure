@@ -117,7 +117,7 @@ def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
     chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
     series = [{"name": 'Production', "data": dfnew['Value'] }, {"name": 'Label2', "data": [4, 5, 6]}]
     title = {"text": 'Dates'}
-    xAxis = {"categories": (df['Dates'].strftime('%Y-%m-%d'))}
+    xAxis = {"categories": (df['Date'].strftime('%Y-%m-%d'))}
     yAxis = {"title": {"text": 'Production'}}
     return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
  
