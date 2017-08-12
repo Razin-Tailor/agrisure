@@ -63,7 +63,7 @@ def prepare_model():
     # print(df_with_crops.head())
 
     # print("Total crop value", crops['total_crop_value'].describe())
-    print crops['total_crop_value'].quantile(np.arange(.9, 1, .01))
+    print (crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
 
     popularity_threshold = 310977
     df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
