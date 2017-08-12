@@ -39,7 +39,7 @@ def prepare_model():
 
     # print("Total crop value", crops['total_crop_value'].describe())
     print (crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
-
+    
     popularity_threshold = 310977
     df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
     # print("df_of_popular_crop", df_popular_crops.head())
@@ -112,14 +112,15 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
 
 @app.route("/")
 def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
-    global df
-    global dfnew
-    chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-    series = [{"name": 'Production', "data": dfnew['Value'] }]
-    title = {"text": 'Dates'}
-    xAxis = {"categories": (df['Date'])}
-    yAxis = {"title": {"text": 'Production'}}
-    return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
+    # global df
+    # global dfnew
+    # chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
+    # series = [{"name": 'Production', "data": dfnew['Value'] }]
+    # title = {"text": 'Dates'}
+    # xAxis = {"categories": (df['Date'])}
+    # yAxis = {"title": {"text": 'Production'}}
+    # return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
+    return render_template('dashboard-2.html')
  
 @app.route('/recomend', methods=['POST'])
 def getData():
@@ -127,7 +128,6 @@ def getData():
     crop = data['crop']
     recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
     return jsonify({'status': recommendations})
-
 
 @app.route('/dynamic', methods=['POST'])
 def rec():
