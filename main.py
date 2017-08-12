@@ -112,8 +112,8 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
             current_query_index = df_matrix.index.tolist().index(i)
             ratio_tuples.append((i, ratio, current_query_index))
     
-    print 'Possible matches: {0}\n'.format([(x[0], x[1]) for x in ratio_tuples])
-    print ratio_tuples
+    print ('Possible matches: {0}\n'.format([(x[0], x[1]) for x in ratio_tuples]))
+    print (ratio_tuples)
 
     try:
         query_index = max(ratio_tuples, key = lambda x: x[1])[2]
