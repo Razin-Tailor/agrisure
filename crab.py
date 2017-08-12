@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from fuzzywuzzy import fuzz
 # from scikits.crab.metrics import pearson_correlation
 # from scikits.crab.similarities import UserSimilarity
