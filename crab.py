@@ -180,27 +180,34 @@ print_artist_recommendations('Jowar',wide_df,model_knn,5)
 
 
 def dynamic_model(season, param):
-    df = df[df.season == season]
+    global df
+    df = df[df['season'] == season]
     df.drop('season', axis=1, inplace=True)
+    df = df[df['indicator'] == param]
+    df.drop('indicator', axis=1, inplace=True)
     if df['crop'].isnull().sum() > 0:
         df = df.dropna(axis = 0, subset = ['crop'])
 
     # print("After processing-------",len(df['crop'].unique()))
-    crops = (df.groupby(by = ['crop'])[param].sum().reset_index().rename(columns = {param: 'total_crop_value'})[['crop', 'total_crop_value']])
+    crops = (df.groupby(by = ['crop'])['Value'].sum().reset_index().rename(columns = {'Value': 'total_crop_value'})[['crop', 'total_crop_value']])
 
     # print(crops.head())
 
     df_with_crops = df.merge(crops, left_on = 'crop', right_on = 'crop', how = 'left')
     # print(df_with_crops.head())
-
+    print(df_with_crops.describe())
     # print("Total crop value", crops['total_crop_value'].describe())
+    quantile = crops['total_crop_value'].quantile(np.arange(.9, 1, .01)).values.tolist()
+    print(quantile)
     print crops['total_crop_value'].quantile(np.arange(.9, 1, .01))
 
-    popularity_threshold = 310977
+    # popularity_threshold = 310977
+    popularity_threshold = quantile[3]
+
     df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
-    # print("df_of_popular_crop", df_popular_crops.head())
+    print("df_of_popular_crop", df_popular_crops.head())
     in_data = df_popular_crops
-    # print("In-data---", in_data.head(), len(in_data['crop'].unique()))
+    print("In-data---", in_data.head(), len(in_data['crop'].unique()))
     if not in_data[in_data.duplicated(['location', 'crop'])].empty:
         initial_rows = in_data.shape[0]
 
@@ -212,13 +219,14 @@ def dynamic_model(season, param):
     else:
         print("consistent data")
     global wide_df
-    wide_df = in_data.pivot(index = 'crop', columns = 'location', values = param).fillna(0)
-    # print(wide_df.head(), wide_df.shape)
-    # print((wide_df.columns.tolist()))
+    wide_df = in_data.pivot(index = 'crop', columns = 'location', values = 'Value').fillna(0)
+    print(wide_df.head(), wide_df.shape)
+    print((wide_df.columns.tolist()))
     wide_df_sparse = csr_matrix(wide_df.values)
 
     #### Fitting Model ####
 
     
     model_knn.fit(wide_df_sparse)
+
 

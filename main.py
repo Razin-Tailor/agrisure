@@ -7,6 +7,7 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 from fuzzywuzzy import fuzz
+from crab import *
 # import matplotlib.pyplot as plt
 
 
@@ -126,6 +127,24 @@ def getData():
     crop = data['crop']
     recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
     return jsonify({'status': recommendations})
+
+
+@app.route('/dynamic', methods=['POST'])
+def rec():
+    data = request.get_json()
+    season = data['season']
+    param = data['param']
+    dynamic_model(season,param)
+
+    query_index = np.random.choice(wide_df.shape[0])
+    distances, indices = model_knn.kneighbors(wide_df.iloc[query_index, :].reshape(1, -1), n_neighbors = 4)
+
+    for i in range(0, len(distances.flatten())):
+        if i == 0:
+            print 'Recommendations for {0}:\n'.format(wide_df.index[query_index])
+        else:
+            print '{0}: {1}, with distance of {2}:'.format(i, wide_df.index[indices.flatten()[i]], distances.flatten()[i])
+
 
 if __name__ == '__main__':
     prepare_model()
