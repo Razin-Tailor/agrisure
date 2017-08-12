@@ -73,11 +73,11 @@ def prepare_model():
     if not in_data[in_data.duplicated(['location', 'crop'])].empty:
         initial_rows = in_data.shape[0]
 
-        print 'Initial dataframe shape {0}'.format(in_data.shape)
+        print( 'Initial dataframe shape {0}'.format(in_data.shape))
         in_data = in_data.drop_duplicates(['location', 'crop'])
         current_rows = in_data.shape[0]
-        print 'New dataframe shape {0}'.format(in_data.shape)
-        print 'Removed {0} rows'.format(initial_rows - current_rows)
+        print( 'New dataframe shape {0}'.format(in_data.shape))
+        print( 'Removed {0} rows'.format(initial_rows - current_rows))
     else:
         print("consistent data")
     global wide_df
@@ -117,9 +117,9 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
 
     try:
         query_index = max(ratio_tuples, key = lambda x: x[1])[2]
-        print query_index # get the index of the best artist match in the data
+        print (query_index) # get the index of the best artist match in the data
     except:
-        print 'Your artist didn\'t match any artists in the data. Try again'
+        print ('Your artist didn\'t match any artists in the data. Try again')
         return None
     print(df_matrix.iloc[query_index, :])
     distances, indices = knn_model.kneighbors(df_matrix.iloc[query_index, :].reshape(1, -1), n_neighbors = k + 1)
@@ -131,13 +131,13 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
         list = []
         if i == 0:
             list.append(df_matrix.index[query_index])
-            print 'Recommendations for {0}:\n'.format(df_matrix.index[query_index])
+            print ('Recommendations for {0}:\n'.format(df_matrix.index[query_index]))
             return list
         else:
             # print(df_matrix.index[indices.flatten()[i]])
             # print(distances.flatten()[i])
             list.append((df_matrix.index[indices.flatten()[i]], distances.flatten()[i]))
-            print '{0}: {1}, with distance of {2}:'.format(i, df_matrix.index[indices.flatten()[i]], distances.flatten()[i])
+            print ('{0}: {1}, with distance of {2}:'.format(i, df_matrix.index[indices.flatten()[i]], distances.flatten()[i]))
         return list
     return None
 
