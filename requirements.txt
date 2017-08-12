@@ -1,7 +1,6 @@
 click==6.7
 cycler==0.10.0
 Flask==0.12.2
-functools32==3.2.3.post2
 fuzzywuzzy==0.15.1
 itsdangerous==0.24
 Jinja2==2.9.6
