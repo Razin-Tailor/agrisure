@@ -18,6 +18,7 @@ db = None
 
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 df = pd.read_csv('ObservationData.csv')
+dfnew = df[df['indicator']=='Production (In Tonnes)']
 model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
 wide_df = pd.DataFrame()
 port = int(os.getenv('PORT', 8080))
@@ -110,11 +111,13 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
 
 @app.route("/")
 def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
+    global df
+    global dfnew
     chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-    series = [{"name": 'Label1', "data": [1,2,3]}, {"name": 'Label2', "data": [4, 5, 6]}]
-    title = {"text": 'My Title'}
-    xAxis = {"categories": ['xAxis Data1', 'xAxis Data2', 'xAxis Data3']}
-    yAxis = {"title": {"text": 'yAxis Label'}}
+    series = [{"name": 'Production', "data": dfnew['Value'] }, {"name": 'Label2', "data": [4, 5, 6]}]
+    title = {"text": 'Dates'}
+    xAxis = {"categories": df['Dates']}
+    yAxis = {"title": {"text": 'Production'}}
     return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
  
 @app.route('/recomend', methods=['POST'])
@@ -123,7 +126,7 @@ def getData():
     crop = data['crop']
     recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
     return jsonify({'status': recommendations})
-    
+
 if __name__ == '__main__':
     prepare_model()
     app.run(host='0.0.0.0', port=port, debug=True)
