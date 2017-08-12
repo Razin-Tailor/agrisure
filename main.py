@@ -115,7 +115,7 @@ def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
     global df
     global dfnew
     chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-    series = [{"name": 'Production', "data": dfnew['Value'] }, {"name": 'Label2', "data": [4, 5, 6]}]
+    series = [{"name": 'Production', "data": dfnew['Value'] }]
     title = {"text": 'Dates'}
     xAxis = {"categories": (df['Date'])}
     yAxis = {"title": {"text": 'Production'}}
