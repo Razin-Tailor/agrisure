@@ -89,7 +89,7 @@ df_with_crops = df.merge(crops, left_on = 'crop', right_on = 'crop', how = 'left
 # print(df_with_crops.head())
 
 print("Total crop value", crops['total_crop_value'].describe())
-print crops['total_crop_value'].quantile(np.arange(.9, 1, .01))
+print (crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
 
 popularity_threshold = 310977
 df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
@@ -99,11 +99,11 @@ print("In-data---", in_data.head(), len(in_data['crop'].unique()))
 if not in_data[in_data.duplicated(['location', 'crop'])].empty:
     initial_rows = in_data.shape[0]
 
-    print 'Initial dataframe shape {0}'.format(in_data.shape)
+    print( 'Initial dataframe shape {0}'.format(in_data.shape))
     in_data = in_data.drop_duplicates(['location', 'crop'])
     current_rows = in_data.shape[0]
-    print 'New dataframe shape {0}'.format(in_data.shape)
-    print 'Removed {0} rows'.format(initial_rows - current_rows)
+    print( 'New dataframe shape {0}'.format(in_data.shape))
+    print( 'Removed {0} rows'.format(initial_rows - current_rows))
 else:
 	print("consistent data")
 
@@ -139,14 +139,14 @@ def print_artist_recommendations(query_crop, df_matrix, knn_model, k):
             current_query_index = df_matrix.index.tolist().index(i)
             ratio_tuples.append((i, ratio, current_query_index))
     
-    print 'Possible matches: {0}\n'.format([(x[0], x[1]) for x in ratio_tuples])
-    print ratio_tuples
+    print( 'Possible matches: {0}\n'.format([(x[0], x[1]) for x in ratio_tuples]))
+    print( ratio_tuples)
 
     try:
         query_index = max(ratio_tuples, key = lambda x: x[1])[2]
-        print query_index # get the index of the best artist match in the data
+        print( query_index) # get the index of the best artist match in the data
     except:
-        print 'Your artist didn\'t match any artists in the data. Try again'
+        print( 'Your artist didn\'t match any artists in the data. Try again')
         return None
     print(df_matrix.iloc[query_index, :])
     distances, indices = knn_model.kneighbors(df_matrix.iloc[query_index, :].reshape(1, -1), n_neighbors = k + 1)
@@ -155,11 +155,11 @@ def print_artist_recommendations(query_crop, df_matrix, knn_model, k):
     # print(df_matrix.index[indices.flatten()[i]])
     for i in range(0, len(distances.flatten())):
         if i == 0:
-            print 'Recommendations for {0}:\n'.format(df_matrix.index[query_index])
+            print( 'Recommendations for {0}:\n'.format(df_matrix.index[query_index]))
         else:
             print(df_matrix.index[indices.flatten()[i]])
             print(distances.flatten()[i])
-            print '{0}: {1}, with distance of {2}:'.format(i, df_matrix.index[indices.flatten()[i]], distances.flatten()[i])
+            print( '{0}: {1}, with distance of {2}:'.format(i, df_matrix.index[indices.flatten()[i]], distances.flatten()[i]))
     return None
 
 ############### Recommendations ###############
@@ -199,7 +199,7 @@ def dynamic_model(season, param):
     # print("Total crop value", crops['total_crop_value'].describe())
     quantile = crops['total_crop_value'].quantile(np.arange(.9, 1, .01)).values.tolist()
     print(quantile)
-    print crops['total_crop_value'].quantile(np.arange(.9, 1, .01))
+    print( crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
 
     # popularity_threshold = 310977
     popularity_threshold = quantile[3]
@@ -211,11 +211,11 @@ def dynamic_model(season, param):
     if not in_data[in_data.duplicated(['location', 'crop'])].empty:
         initial_rows = in_data.shape[0]
 
-        print 'Initial dataframe shape {0}'.format(in_data.shape)
+        print( 'Initial dataframe shape {0}'.format(in_data.shape))
         in_data = in_data.drop_duplicates(['location', 'crop'])
         current_rows = in_data.shape[0]
-        print 'New dataframe shape {0}'.format(in_data.shape)
-        print 'Removed {0} rows'.format(initial_rows - current_rows)
+        print('New dataframe shape {0}'.format(in_data.shape))
+        print( 'Removed {0} rows'.format(initial_rows - current_rows))
     else:
         print("consistent data")
     global wide_df
