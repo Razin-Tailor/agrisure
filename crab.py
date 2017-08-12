@@ -11,24 +11,24 @@ from fuzzywuzzy import fuzz
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 df = pd.read_csv('ObservationData.csv')
 
-dfN = pd.read_csv('2007_ProductionInTonnesBySeasonAndCropsCleaned.csv')
-dfTest = pd.read_csv('2007_ProductionInTonnesBySeasonAndCrops.csv', names=['id','location','crop','season','value'])
-# print(len(dfTest['location'].unique()))
-locations = dfTest['location'].unique()
-print(df.index)
-df = df[df.season == 'Total']
-df.drop('season', axis=1, inplace=True)
-print(df['Date'].dtype)
-df = df[df['Date'] == 2007]
-df.drop('Date', axis=1, inplace=True)
-df = df[df['indicator'] == 'Production (In Tonnes)']
-df.drop('indicator', axis=1, inplace=True)
-df.drop('Unit', axis=1, inplace=True)
+# dfN = pd.read_csv('2007_ProductionInTonnesBySeasonAndCropsCleaned.csv')
+# dfTest = pd.read_csv('2007_ProductionInTonnesBySeasonAndCrops.csv', names=['id','location','crop','season','value'])
+# # print(len(dfTest['location'].unique()))
+# locations = dfTest['location'].unique()
+# print(df.index)
+# df = df[df.season == 'Total']
+# df.drop('season', axis=1, inplace=True)
+# print(df['Date'].dtype)
+# df = df[df['Date'] == 2007]
+# df.drop('Date', axis=1, inplace=True)
+# df = df[df['indicator'] == 'Production (In Tonnes)']
+# df.drop('indicator', axis=1, inplace=True)
+# df.drop('Unit', axis=1, inplace=True)
 
-print(df.head(), len(df['crop'].unique()))
+# print(df.head(), len(df['crop'].unique()))
 
-model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
-wide_df = pd.DataFrame()
+# model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
+# wide_df = pd.DataFrame()
 
 
 # col = ['Date', 'season']
