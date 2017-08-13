@@ -91,24 +91,20 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
     print(distances.flatten(), indices)
     print(df_matrix.index[query_index])
     # print(df_matrix.index[indices.flatten()[i]])
-    dict = {}
+    list = []
     for i in range(0, len(distances.flatten())):
-        list = []
         if i == 0:
-            list.append(df_matrix.index[query_index])
+            # list.append(df_matrix.index[query_index])
             print ('Recommendations for {0}:\n'.format(df_matrix.index[query_index]))
-            return list
+            # return list
         else:
             # print(df_matrix.index[indices.flatten()[i]])
             # print(distances.flatten()[i])
             list.append((df_matrix.index[indices.flatten()[i]], distances.flatten()[i]))
             print ('{0}: {1}, with distance of {2}:'.format(i, df_matrix.index[indices.flatten()[i]], distances.flatten()[i]))
-        return list
-    return None
-
-
-
-
+        # return list
+    list.sort(key = lambda x: x[1])
+    return list
 
 @app.route("/")
 def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
@@ -132,19 +128,12 @@ def getData():
 @app.route('/dynamic', methods=['POST'])
 def rec():
     data = request.get_json()
+    crop = data['crop']
     season = data['season']
     param = data['param']
     dynamic_model(season,param)
-
-    query_index = np.random.choice(wide_df.shape[0])
-    distances, indices = model_knn.kneighbors(wide_df.iloc[query_index, :].reshape(1, -1), n_neighbors = 4)
-
-    for i in range(0, len(distances.flatten())):
-        if i == 0:
-            print( 'Recommendations for {0}:\n'.format(wide_df.index[query_index]))
-        else:
-            print( '{0}: {1}, with distance of {2}:'.format(i, wide_df.index[indices.flatten()[i]], distances.flatten()[i]))
-    return jsonify({'status':'success'})
+    recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
+    return jsonify({'suggestion' : recommendations})
 
 if __name__ == '__main__':
     prepare_model()
