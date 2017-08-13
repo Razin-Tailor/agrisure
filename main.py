@@ -22,6 +22,7 @@ df = pd.read_csv('ObservationData.csv')
 dfnew = df[df['indicator']=='Production (In Tonnes)']
 model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
 wide_df = pd.DataFrame()
+wide_df_rain = pd.DataFrame()
 port = int(os.getenv('PORT', 8080))
 
 def prepare_model():
@@ -60,6 +61,56 @@ def prepare_model():
     # print(wide_df.head(), wide_df.shape)
     # print((wide_df.columns.tolist()))
     wide_df_sparse = csr_matrix(wide_df.values)
+
+    #### Fitting Model ####
+
+    
+    model_knn.fit(wide_df_sparse)
+
+def prepare_model_rainfall():
+    global df
+    global wide_df_rain
+
+    if df['crop'].isnull().sum() > 0:
+        df = df.dropna(axis = 0, subset = ['crop'])
+
+    # print("After processing-------",len(df['crop'].unique()))
+    crops = (df.groupby(by = ['crop'])['mean'].sum().reset_index().rename(columns = {'mean': 'total_crop_value'})[['crop', 'total_crop_value']])
+
+    # print(crops.head())
+
+    df_with_crops = df.merge(crops, left_on = 'crop', right_on = 'crop', how = 'left')
+    # print(df_with_crops.head())
+
+    # print("Total crop value", crops['total_crop_value'].describe())
+    print (crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
+    
+    quantile = crops['total_crop_value'].quantile(np.arange(.9, 1, .01)).values.tolist()
+    print(quantile)
+    print (crops['total_crop_value'].quantile(np.arange(.9, 1, .01))
+    )
+
+    popularity_threshold = quantile[3]
+
+    # popularity_threshold = 310977
+    df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
+    # print("df_of_popular_crop", df_popular_crops.head())
+    in_data = df_popular_crops
+    # print("In-data---", in_data.head(), len(in_data['crop'].unique()))
+    if not in_data[in_data.duplicated(['location', 'crop'])].empty:
+        initial_rows = in_data.shape[0]
+
+        print( 'Initial dataframe shape {0}'.format(in_data.shape))
+        in_data = in_data.drop_duplicates(['location', 'crop'])
+        current_rows = in_data.shape[0]
+        print( 'New dataframe shape {0}'.format(in_data.shape))
+        print( 'Removed {0} rows'.format(initial_rows - current_rows))
+    else:
+        print("consistent data")
+    wide_df_rain = in_data.pivot(index = 'crop', columns = 'location', values = 'mean').fillna(0)
+    # print(wide_df.head(), wide_df.shape)
+    # print((wide_df.columns.tolist()))
+    wide_df_sparse = csr_matrix(wide_df_rain.values)
 
     #### Fitting Model ####
 
@@ -134,6 +185,19 @@ def rec():
     dynamic_model(season,param)
     recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
     return jsonify({'suggestion' : recommendations})
+
+@app.route('/dynamicrain', methods=['POST'])
+def rec():
+    data = request.get_json()
+    crop = data['crop']
+    season = data['season']
+    param = data['param']
+    if param == 'mean':
+        dynamic_model(season,param)
+        recommendations = get_crop_recommendations(crop,wide_df, model_knn, 5)
+        return jsonify({'suggestion' : recommendations})
+    else:
+        return jsonify({'status': 'failure'})
 
 if __name__ == '__main__':
     prepare_model()
