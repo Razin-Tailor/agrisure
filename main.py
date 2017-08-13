@@ -129,7 +129,7 @@ def dynamic_model(season, param):
     # print("Total crop value", crops['total_crop_value'].describe())
     quantile = crops['total_crop_value'].quantile(np.arange(.9, 1, .01)).values.tolist()
     print(quantile)
-    print crops['total_crop_value'].quantile(np.arange(.9, 1, .01))
+    print( crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
 
     # popularity_threshold = 310977
     popularity_threshold = quantile[3]
@@ -141,11 +141,11 @@ def dynamic_model(season, param):
     if not in_data[in_data.duplicated(['location', 'crop'])].empty:
         initial_rows = in_data.shape[0]
 
-        print 'Initial dataframe shape {0}'.format(in_data.shape)
+        print( 'Initial dataframe shape {0}'.format(in_data.shape))
         in_data = in_data.drop_duplicates(['location', 'crop'])
         current_rows = in_data.shape[0]
-        print 'New dataframe shape {0}'.format(in_data.shape)
-        print 'Removed {0} rows'.format(initial_rows - current_rows)
+        print( 'New dataframe shape {0}'.format(in_data.shape))
+        print( 'Removed {0} rows'.format(initial_rows - current_rows))
     else:
         print("consistent data")
     global wide_df
