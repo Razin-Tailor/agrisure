@@ -96,7 +96,7 @@ def rec():
     return jsonify({'suggestion' : recommendations})
 
 @app.route('/dynamicrain', methods=['POST'])
-def rec():
+def rec_rain():
     data = request.get_json()
     crop = data['crop']
     season = data['season']
