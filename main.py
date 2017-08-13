@@ -109,6 +109,7 @@ def rec_rain():
         return jsonify({'status': 'failure'})
 
 def dynamic_model(season, param):
+    global df
     df = df[df['season'] == season]
     df.drop('season', axis=1, inplace=True)
     if df['crop'].isnull().sum() > 0:
