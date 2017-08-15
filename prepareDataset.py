@@ -34,11 +34,8 @@ final_merged_df.drop('Population (2011)', axis=1, inplace=True)
 final_merged_df.drop('Type', axis=1, inplace=True)
 final_merged_df.drop('Population class', axis=1, inplace=True)
 
-
 print(final_merged_df.head())
 print(final_merged_df.columns.values)
-
-
 
 done = final_merged_df.to_csv('FinalDataset.csv')
 
