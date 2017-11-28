@@ -27,7 +27,7 @@ $ python main.py
 
 ```
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+Your app should now be running on [0.0.0.0:8080](http://0.0.0.0:8080/).
 
 
 ## Documentation
