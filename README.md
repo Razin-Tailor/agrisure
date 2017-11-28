@@ -1,18 +1,9 @@
 # AgriSure
-========
-### A Crop Recommender System for Farmers
--------------------------------------
 
-
-# Python: Getting Started
-
-A barebones Django app, which can easily be deployed to Heroku.
-
-This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
+AgriSure is a Crop-Recommender-System. It is built with the vision of updating the traditional crop cultivation approach. With the utilisation of Historical Data, It takes into account various factors and provides the best 3 suggestions of crops for farmers to cultivate in a perticular season.
 
 ## Running Locally
 
-Make sure you have Python [installed properly](http://install.python-guide.org).  Also, install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
 
 ```sh
 $ git clone git@github.com:heroku/python-getting-started.git
@@ -20,12 +11,8 @@ $ cd python-getting-started
 
 $ pip install -r requirements.txt
 
-$ createdb python_getting_started
+$ python main.py
 
-$ python manage.py migrate
-$ python manage.py collectstatic
-
-$ heroku local
 ```
 
 Your app should now be running on [localhost:5000](http://localhost:5000/).
