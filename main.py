@@ -41,7 +41,6 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
     return list
 
 def preprocess(df):
-    df = pd.read_csv('ObservationData.csv')
     df = df[df['season'] == season]
     df.drop('season', axis=1, inplace=True)
     df = df[df['indicator'] == param]
@@ -53,6 +52,7 @@ def preprocess(df):
         return df
 
 def dynamic_model(season, param):
+    df = pd.read_csv('ObservationData.csv')
     df = preprocess(df) 
     # print("After processing-------",len(df['crop'].unique()))
     crops = (df.groupby(by = ['crop'])['Value'].sum().reset_index().rename(columns = {'Value': 'total_crop_value'})[['crop', 'total_crop_value']])
