@@ -1,30 +1,4 @@
-from flask import Flask, render_template, request, jsonify
-
-import os
-import json
-import numpy as np
-import pandas as pd
-from scipy.sparse import csr_matrix
-from sklearn.neighbors import NearestNeighbors
-from fuzzywuzzy import fuzz
-from testing import *
-# import matplotlib.pyplot as plt
-
-
-app = Flask(__name__)
-
-db_name = 'mydb'
-client = None
-db = None
-
-pd.set_option('display.float_format', lambda x: '%.3f' % x)
-df = pd.read_csv('ObservationData.csv')
-dfnew = df[df['indicator']=='Production (In Tonnes)']
-model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
-wide_df = pd.DataFrame()
-wide_df_rain = pd.DataFrame()
-port = int(os.getenv('PORT', 8080))
-
+from config import *
 
 def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
     print(df_matrix.head())
@@ -66,17 +40,60 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
     list.sort(key = lambda x: x[1])
     return list
 
+def dynamic_model(season, param):
+    df = pd.read_csv('ObservationData.csv')
+    df = df[df['season'] == season]
+    df.drop('season', axis=1, inplace=True)
+    df = df[df['indicator'] == param]
+    df.drop('indicator', axis=1, inplace=True)
+    if df['crop'].isnull().sum() > 0:
+        df = df.dropna(axis = 0, subset = ['crop'])
+
+    # print("After processing-------",len(df['crop'].unique()))
+    crops = (df.groupby(by = ['crop'])['Value'].sum().reset_index().rename(columns = {'Value': 'total_crop_value'})[['crop', 'total_crop_value']])
+
+    # print(crops.head())
+
+    df_with_crops = df.merge(crops, left_on = 'crop', right_on = 'crop', how = 'left')
+    # print(df_with_crops.head())
+    print(df_with_crops.describe())
+    # print("Total crop value", crops['total_crop_value'].describe())
+    quantile = crops['total_crop_value'].quantile(np.arange(.9, 1, .01)).values.tolist()
+    print(quantile)
+    print( crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
+
+    # popularity_threshold = 310977
+    popularity_threshold = quantile[3]
+
+    df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
+    print("df_of_popular_crop", df_popular_crops.head())
+    in_data = df_popular_crops
+    print("In-data---", in_data.head(), len(in_data['crop'].unique()))
+    if not in_data[in_data.duplicated(['location', 'crop'])].empty:
+        initial_rows = in_data.shape[0]
+
+        print( 'Initial dataframe shape {0}'.format(in_data.shape))
+        in_data = in_data.drop_duplicates(['location', 'crop'])
+        current_rows = in_data.shape[0]
+        print( 'New dataframe shape {0}'.format(in_data.shape))
+        print( 'Removed {0} rows'.format(initial_rows - current_rows))
+    else:
+        print("consistent data")
+    global wide_df
+    wide_df = in_data.pivot(index = 'crop', columns = 'location', values = 'Value').fillna(0)
+    print(wide_df.head(), wide_df.shape)
+    print((wide_df.columns.tolist()))
+    wide_df_sparse = csr_matrix(wide_df.values)
+
+    #### Fitting Model ####
+
+    
+    model_knn.fit(wide_df_sparse)
+
+
 @app.route("/")
 def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
-    # global df
-    # global dfnew
-    # chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}
-    # series = [{"name": 'Production', "data": dfnew['Value'] }]
-    # title = {"text": 'Dates'}
-    # xAxis = {"categories": (df['Date'])}
-    # yAxis = {"title": {"text": 'Production'}}
-    # return render_template('index.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis, yAxis=yAxis)
-    return render_template('dashboard-2.html')
+    return "Hello World"
  
 @app.route('/recomend', methods=['POST'])
 def getData():
@@ -109,55 +126,6 @@ def rec_rain():
     else:
         return jsonify({'status': 'failure'})
 
-def dynamic_model(season, param):
-    df = pd.read_csv('ObservationData.csv')
-    df = df[df['season'] == season]
-    df.drop('season', axis=1, inplace=True)
-    df = df[df['indicator'] == param]
-    df.drop('indicator', axis=1, inplace=True)
-    if df['crop'].isnull().sum() > 0:
-        df = df.dropna(axis = 0, subset = ['crop'])
-
-    # print("After processing-------",len(df['crop'].unique()))
-    crops = (df.groupby(by = ['crop'])['Value'].sum().reset_index().rename(columns = {'Value': 'total_crop_value'})[['crop', 'total_crop_value']])
-
-    # print(crops.head())
-
-    df_with_crops = df.merge(crops, left_on = 'crop', right_on = 'crop', how = 'left')
-    # print(df_with_crops.head())
-    print(df_with_crops.describe())
-    # print("Total crop value", crops['total_crop_value'].describe())
-    quantile = crops['total_crop_value'].quantile(np.arange(.9, 1, .01)).values.tolist()
-    print(quantile)
-    print( crops['total_crop_value'].quantile(np.arange(.9, 1, .01)))
-
-    # popularity_threshold = 310977
-    popularity_threshold = quantile[3]
-
-    df_popular_crops = df_with_crops.query('total_crop_value >= @popularity_threshold')
-    print("df_of_popular_crop", df_popular_crops.head())
-    in_data = df_popular_crops
-    print("In-data---", in_data.head(), len(in_data['crop'].unique()))
-
-    if not in_data[in_data.duplicated(['location', 'crop'])].empty:
-        initial_rows = in_data.shape[0]
-
-        print( 'Initial dataframe shape {0}'.format(in_data.shape))
-        in_data = in_data.drop_duplicates(['location', 'crop'])
-        current_rows = in_data.shape[0]
-        print( 'New dataframe shape {0}'.format(in_data.shape))
-        print( 'Removed {0} rows'.format(initial_rows - current_rows))
-    else:
-        print("consistent data")
-    global wide_df
-    wide_df = in_data.pivot(index = 'crop', columns = 'location', values = 'Value').fillna(0)
-    print(wide_df.head(), wide_df.shape)
-    print((wide_df.columns.tolist()))
-    wide_df_sparse = csr_matrix(wide_df.values)
-
-    #### Fitting Model ####
-        
-    model_knn.fit(wide_df_sparse)
 
 if __name__ == '__main__':
     # prepare_model()
