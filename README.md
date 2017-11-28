@@ -6,8 +6,8 @@ AgriSure is a Crop-Recommender-System. It is built with the vision of updating t
 
 
 ```sh
-$ git clone git@github.com:heroku/python-getting-started.git
-$ cd python-getting-started
+$ git clone https://gitlab.com/Razin-Tailor/agrisure-backend.git
+$ cd agrisure-backend
 
 $ pip install -r requirements.txt
 
@@ -16,19 +16,6 @@ $ python main.py
 ```
 
 Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```sh
-$ heroku create
-$ git push heroku master
-
-$ heroku run python manage.py migrate
-$ heroku open
-```
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Documentation
 
