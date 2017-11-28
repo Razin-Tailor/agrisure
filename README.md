@@ -1,6 +1,6 @@
-AgriSure
+# AgriSure
 ========
-A Crop Recommender System for Farmers
+### A Crop Recommender System for Farmers
 -------------------------------------
 
 
