@@ -138,6 +138,7 @@ def dynamic_model(season, param):
     print("df_of_popular_crop", df_popular_crops.head())
     in_data = df_popular_crops
     print("In-data---", in_data.head(), len(in_data['crop'].unique()))
+
     if not in_data[in_data.duplicated(['location', 'crop'])].empty:
         initial_rows = in_data.shape[0]
 
@@ -155,8 +156,7 @@ def dynamic_model(season, param):
     wide_df_sparse = csr_matrix(wide_df.values)
 
     #### Fitting Model ####
-
-    
+        
     model_knn.fit(wide_df_sparse)
 
 if __name__ == '__main__':
