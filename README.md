@@ -32,6 +32,6 @@ Your app should now be running on [localhost:5000](http://localhost:5000/).
 
 ## Documentation
 
-For more information about using Python on Heroku, see these Dev Center articles:
+The Detailed Docs:
 
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
+- points about agrisure
