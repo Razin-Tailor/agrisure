@@ -40,7 +40,7 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
     list.sort(key = lambda x: x[1])
     return list
 
-def dynamic_model(season, param):
+def preprocess(df):
     df = pd.read_csv('ObservationData.csv')
     df = df[df['season'] == season]
     df.drop('season', axis=1, inplace=True)
@@ -48,7 +48,12 @@ def dynamic_model(season, param):
     df.drop('indicator', axis=1, inplace=True)
     if df['crop'].isnull().sum() > 0:
         df = df.dropna(axis = 0, subset = ['crop'])
+        return df
+    else:
+        return df
 
+def dynamic_model(season, param):
+    df = preprocess(df) 
     # print("After processing-------",len(df['crop'].unique()))
     crops = (df.groupby(by = ['crop'])['Value'].sum().reset_index().rename(columns = {'Value': 'total_crop_value'})[['crop', 'total_crop_value']])
 
@@ -86,7 +91,6 @@ def dynamic_model(season, param):
     wide_df_sparse = csr_matrix(wide_df.values)
 
     #### Fitting Model ####
-
     
     model_knn.fit(wide_df_sparse)
 
