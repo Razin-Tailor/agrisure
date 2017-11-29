@@ -6,8 +6,8 @@ from sklearn.neighbors import NearestNeighbors
 # import matplotlib.pyplot as plt
 from fuzzywuzzy import fuzz
 
-rain_data  = pd.read_csv('metereological_subdivisionwise_2010_2011.csv')
-df = pd.read_csv('ObservationData.csv')
+rain_data  = pd.read_csv('Datasets/metereological_subdivisionwise_2010_2011.csv')
+df = pd.read_csv('Datasets/ObservationData.csv')
 model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
 wide_df = pd.DataFrame()
 # print(rain_data.head())
