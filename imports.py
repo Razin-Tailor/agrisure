@@ -7,5 +7,4 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 from fuzzywuzzy import fuzz
-from testing import *
 # import matplotlib.pyplot as plt
