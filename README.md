@@ -29,9 +29,3 @@ $ python main.py
 
 Your app should now be running on [0.0.0.0:8080](http://0.0.0.0:8080/).
 
-
-## Documentation
-
-The Detailed Docs:
-
-- points about agrisure
