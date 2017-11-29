@@ -16,9 +16,9 @@ def get_crop_recommendations(query_crop, df_matrix, knn_model, k):
 
     try:
         query_index = max(ratio_tuples, key = lambda x: x[1])[2]
-        print (query_index) # get the index of the best artist match in the data
+        print (query_index)
     except:
-        print ('Your artist didn\'t match any artists in the data. Try again')
+        print ('Try again')
         return None
     print(df_matrix.iloc[query_index, :])
     distances, indices = knn_model.kneighbors(df_matrix.iloc[query_index, :].reshape(1, -1), n_neighbors = k + 1)
