@@ -52,7 +52,7 @@ def preprocess(df, season, param):
         return df
 
 def dynamic_model(season, param):
-    df = pd.read_csv('ObservationData.csv')
+    df = pd.read_csv('Datasets/ObservationData.csv')
     df = preprocess(df, season, param) 
     # print("After processing-------",len(df['crop'].unique()))
     crops = (df.groupby(by = ['crop'])['Value'].sum().reset_index().rename(columns = {'Value': 'total_crop_value'})[['crop', 'total_crop_value']])
