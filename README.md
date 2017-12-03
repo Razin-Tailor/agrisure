@@ -41,7 +41,7 @@ Hence we merge the total *param* count data into the location activity data, giv
 
 ### Picking a threshold for popular crops
 
-With nearly 300,000 different crops, it’s almost a guarantee most crops have less *params*
+With nearly 52 different crops, it’s almost a guarantee most crops have less *params*
 
 So we filter out the data with the right threshold
 
