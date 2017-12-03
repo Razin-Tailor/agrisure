@@ -9,3 +9,4 @@ model_knn = NearestNeighbors(metric = 'cosine', algorithm = 'brute')
 wide_df = pd.DataFrame()
 wide_df_rain = pd.DataFrame()
 port = int(os.getenv('PORT', 8080))
+
